@@ -5,12 +5,12 @@ import com.codegenius.shop.constants.ShopConstants;
 import com.codegenius.shop.dao.UserDao;
 import com.codegenius.shop.enums.UserRole;
 import com.codegenius.shop.service.UserService;
+import com.codegenius.shop.utils.PasswordUtils;
 import com.codegenius.shop.utils.ShopUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
@@ -25,13 +25,10 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserDao userDao;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
 
     @Override
     public ResponseEntity<String> register(Map<String, String> requestMap) {
-        log.info("Inside signup {}", requestMap);
         try {
             if(validateCredentials(requestMap)) {
                 User user = userDao.findByEmailId(requestMap.get("email"));
@@ -58,8 +55,11 @@ public class UserServiceImpl implements UserService {
     User user = new User();
     user.setName(requestMap.get("name"));
     user.setEmail(requestMap.get("email"));
-    user.setPassword(requestMap.get("password"));
-
+    String hashedPassword = PasswordUtils.hashPassword(requestMap.get("password"));
+    user.setPassword(hashedPassword);
+    if (requestMap.containsKey("role")) {
+        user.setRole(UserRole.valueOf(requestMap.get("role").trim().toUpperCase()));
+    }
     return user;
 }
 }
