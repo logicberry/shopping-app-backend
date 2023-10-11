@@ -29,23 +29,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<String> register(Map<String, String> requestMap) {
-        try {
-            if(validateCredentials(requestMap)) {
-                User user = userDao.findByEmailId(requestMap.get("email"));
-                if(Objects.isNull(user)) {
-                    userDao.save(getUSerFromMap(requestMap));
-                    return ShopUtils.getResponseEntity("Registration Successful", HttpStatus.OK);
-                } else {
-                    return ShopUtils.getResponseEntity("Email already exists", HttpStatus.BAD_REQUEST);
-                }
-            } else {
-                return ShopUtils.getResponseEntity(ShopConstants.INVALID_CREDENTIALS, HttpStatus.BAD_REQUEST);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (!validateCredentials(requestMap)) {
+            return ShopUtils.getResponseEntity(ShopConstants.INVALID_CREDENTIALS, HttpStatus.BAD_REQUEST);
         }
-        return ShopUtils.getResponseEntity(ShopConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+
+        User user = userDao.findByEmailId(requestMap.get("email"));
+        if (user != null) {
+            return ShopUtils.getResponseEntity("Email already exists", HttpStatus.BAD_REQUEST);
+        }
+
+        User newUser = getUSerFromMap(requestMap);
+        userDao.save(newUser);
+
+        return ShopUtils.getResponseEntity("Registration Successful", HttpStatus.OK);
     }
+
 
     private boolean validateCredentials(Map<String, String> requestMap) {
         return requestMap.containsKey("name") && requestMap.containsKey("email") && requestMap.containsKey("password");
