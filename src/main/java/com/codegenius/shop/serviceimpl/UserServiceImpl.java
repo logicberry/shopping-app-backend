@@ -10,6 +10,7 @@ import com.codegenius.shop.enums.UserRole;
 import com.codegenius.shop.service.UserService;
 import com.codegenius.shop.utils.PasswordUtils;
 import com.codegenius.shop.utils.ShopUtils;
+import com.codegenius.shop.wrapper.UserWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -39,6 +42,9 @@ public class UserServiceImpl implements UserService {
     AuthenticationManager authenticationManager;
     @Autowired
     JwtUtil jwtUtil;
+
+    @Autowired
+    JwtFilter jwtfilter;
 
 
     @Autowired
@@ -89,7 +95,7 @@ public class UserServiceImpl implements UserService {
                             customerUserDetailsService.getUserDetails().getEmail(), String.valueOf(customerUserDetailsService.getUserDetails().getRole())) + "\"}",
                             HttpStatus.OK);
                 } else {
-                    return new ResponseEntity<>("{\"message\":\"" + "Wait for Admin Approvel." + "\"}",
+                    return new ResponseEntity<>("{\"message\":\"" + "Account not verified." + "\"}",
                             HttpStatus.BAD_REQUEST);
                 }
 
@@ -98,4 +104,19 @@ public class UserServiceImpl implements UserService {
         }
         return new ResponseEntity<>("{\"message\":\"" + "Bad Credentials." + "\"}",
                 HttpStatus.BAD_REQUEST);
-    }}
+    }
+
+    @Override
+    public ResponseEntity<List<UserWrapper>> getAllUser() {
+        try {
+          if (jwtfilter.isAdmin()) {
+            return new ResponseEntity<>(userDao.getAllUser(), HttpStatus.OK);
+          } else {
+              return new ResponseEntity<>(new ArrayList<>(), HttpStatus.UNAUTHORIZED);
+          }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
