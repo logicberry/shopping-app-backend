@@ -7,6 +7,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,43 +18,43 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-@Component
-@RequiredArgsConstructor
+@Configuration
 public class JwtFilter extends OncePerRequestFilter {
-    private final JwtUtil jwtUtil;
-    private final CustomerUserDetailsService customerUsersDetailsService;
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
+    private CustomerUserDetailsService service;
+
     Claims claims = null;
     private String username = null;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String servletPath = request.getServletPath();
+    protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
+        if (httpServletRequest.getServletPath().matches("/auth/login|/auth/forgetpassword|/auth/register")) {
+            filterChain.doFilter(httpServletRequest, httpServletResponse);
+        } else {
+            String authorizationHeader = httpServletRequest.getHeader("Authorization");
+            String token = null;
 
-        if (servletPath.matches("/auth/(login|forgot-password|register)")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        String authorizationHeader = request.getHeader("Authorization");
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            String token = authorizationHeader.substring(7);
-             username = jwtUtil.extractUsername(token);
-             claims = jwtUtil.extractAllClaims(token);
-
+            if (authorizationHeader != null && authorizationHeader.startsWith("Bearer")) {
+                token = authorizationHeader.substring(7);
+                username = jwtUtil.extractUsername(token);
+                claims = jwtUtil.extractAllClaims(token);
+            }
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails = customerUsersDetailsService.loadUserByUsername(username);
+                UserDetails userDetails = service.loadUserByUsername(username);
                 if (jwtUtil.validateToken(token, userDetails)) {
-                    UsernamePasswordAuthenticationToken authToken =
+                    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                             new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                    usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
+                    SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
                 }
             }
-
-
-            filterChain.doFilter(request, response);
+            filterChain.doFilter(httpServletRequest, httpServletResponse);
         }
     }
+
 
     public boolean isAdmin() {
         return UserRole.ADMIN.name().equalsIgnoreCase((String) claims.get("role"));
@@ -66,4 +68,5 @@ public class JwtFilter extends OncePerRequestFilter {
     public String getCurrentUsername() {
         return username;
     }
+
 }
