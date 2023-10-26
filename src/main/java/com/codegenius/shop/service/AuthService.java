@@ -6,8 +6,11 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 import java.util.Map;
 
-public interface UserService {
-    ResponseEntity<List<UserWrapper>> getAllUser();
+public interface AuthService {
 
-    ResponseEntity<String> update(Map<String, String> requestMap);
+    ResponseEntity<String> register(Map<String, String> requestMap);
+
+     ResponseEntity<String> login(Map<String, String> requestMap);
+
+
 }

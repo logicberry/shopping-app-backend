@@ -11,16 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 import java.util.Map;
 
-@RequestMapping(path = "/auth")
+@RequestMapping(path = "/users")
 
 public interface UserRest {
-    @PostMapping(path = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> register(@RequestBody(required = true) Map<String, String> requestMap);
 
-    @PostMapping(path = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> login(@RequestBody(required = true) Map<String, String> requestMap);
-
-    @GetMapping(path = "/users")
+    @GetMapping(path = "/")
     public ResponseEntity<List<UserWrapper>> getAllUser();
 
+    @PostMapping(path = "/update", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> update(@RequestBody(required = true) Map<String, String> requestMap);
 }
