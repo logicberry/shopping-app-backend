@@ -54,9 +54,30 @@ public class UserServiceImpl implements UserService {
                userDao.save(user);
                return ShopUtils.getResponseEntity("User Data Successfully updated", HttpStatus.OK);
            }
+            return ShopUtils.getResponseEntity(ShopConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
         return ShopUtils.getResponseEntity(ShopConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @Override
+    public ResponseEntity<String> changePassword(Map<String, String> requestMap) {
+        try {
+            User user = userDao.findByEmailId(jwtfilter.getCurrentUser());
+            if (!user.equals(null)) {
+                if(user.getPassword().equals(requestMap.get("oldPassword"))) {
+                    user.setPassword(requestMap.get("newPassword"));
+                    userDao.save(user);
+                    return ShopUtils.getResponseEntity("Password Updated successfully", HttpStatus.OK);
+                }
+                return ShopUtils.getResponseEntity("Incorrect password", HttpStatus.BAD_REQUEST);
+            }
+            return ShopUtils.getResponseEntity(ShopConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return ShopUtils.getResponseEntity(ShopConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 }

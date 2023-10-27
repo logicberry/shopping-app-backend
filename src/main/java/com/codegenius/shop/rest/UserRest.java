@@ -20,4 +20,10 @@ public interface UserRest {
 
     @PostMapping(path = "/update", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> update(@RequestBody(required = true) Map<String, String> requestMap);
+
+    @PostMapping(path = "/change-password", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> changePassword(@RequestBody(required = true) Map<String, String> requestMap);
+
+
+
 }
