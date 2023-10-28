@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 public interface UserService {
+
+    ResponseEntity<UserWrapper> viewProfile();
     ResponseEntity<List<UserWrapper>> getAllUser();
 
     ResponseEntity<String> update(Map<String, String> requestMap);

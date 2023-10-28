@@ -20,6 +20,17 @@ import java.util.Map;
 public class UserRestImpl implements UserRest {
     @Autowired
     UserService userService;
+
+    @Override
+    public ResponseEntity<UserWrapper> viewProfile() {
+        try {
+            return userService.viewProfile();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+
+        }
+        return new ResponseEntity<>( HttpStatus.INTERNAL_SERVER_ERROR);
+    }
     @Override
     public ResponseEntity<List<UserWrapper>> getAllUser() {
         try {

@@ -16,6 +16,9 @@ import java.util.Map;
 public interface UserRest {
 
     @GetMapping(path = "/")
+    public ResponseEntity<UserWrapper> viewProfile();
+
+    @GetMapping(path = "/getAll")
     public ResponseEntity<List<UserWrapper>> getAllUser();
 
     @PostMapping(path = "/update", produces = MediaType.APPLICATION_JSON_VALUE)

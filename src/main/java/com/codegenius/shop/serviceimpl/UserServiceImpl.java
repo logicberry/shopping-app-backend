@@ -31,6 +31,16 @@ public class UserServiceImpl implements UserService {
     JwtFilter jwtfilter;
 
     @Override
+    public ResponseEntity<UserWrapper> viewProfile() {
+        try {
+                return new ResponseEntity<>(userDao.viewProfile(), HttpStatus.OK);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
     public ResponseEntity<List<UserWrapper>> getAllUser() {
         try {
             if (jwtfilter.isAdmin()) {
@@ -48,11 +58,11 @@ public class UserServiceImpl implements UserService {
     public ResponseEntity<String> update(Map<String, String> requestMap) {
         try {
            User user = userDao.findByEmailId(jwtfilter.getCurrentUser());
-           if (!user.equals(null)) {
-               user.setName(requestMap.get("name"));
-               user.setPhone(requestMap.get("phone"));
-               user.setAddress(requestMap.get("address"));
-               user.setCountry(requestMap.get("country"));
+           if (user != null) {
+               user.setName(requestMap.getOrDefault("name", user.getName()));
+               user.setPhone(requestMap.getOrDefault("phone", user.getPhone()));
+               user.setAddress(requestMap.getOrDefault("address", user.getAddress()));
+               user.setCountry(requestMap.getOrDefault("country", user.getCountry()));
                userDao.save(user);
                return ShopUtils.getResponseEntity("User Data Successfully updated", HttpStatus.OK);
            }
