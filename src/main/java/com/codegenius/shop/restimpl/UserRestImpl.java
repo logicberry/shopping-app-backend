@@ -52,4 +52,5 @@ public class UserRestImpl implements UserRest {
         return ShopUtils.getResponseEntity(ShopConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+
 }

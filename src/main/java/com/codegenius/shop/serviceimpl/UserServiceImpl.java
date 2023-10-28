@@ -1,5 +1,4 @@
 package com.codegenius.shop.serviceimpl;
-
 import com.codegenius.shop.JWT.JwtFilter;
 import com.codegenius.shop.POJO.User;
 import com.codegenius.shop.constants.ShopConstants;
@@ -7,6 +6,7 @@ import com.codegenius.shop.dao.UserDao;
 import com.codegenius.shop.service.UserService;
 import com.codegenius.shop.utils.ShopUtils;
 import com.codegenius.shop.wrapper.UserWrapper;
+import com.google.common.base.Strings;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -79,5 +80,6 @@ public class UserServiceImpl implements UserService {
         }
         return ShopUtils.getResponseEntity(ShopConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
 
 }

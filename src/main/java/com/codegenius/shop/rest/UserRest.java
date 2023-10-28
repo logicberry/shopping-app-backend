@@ -25,5 +25,4 @@ public interface UserRest {
     public ResponseEntity<String> changePassword(@RequestBody(required = true) Map<String, String> requestMap);
 
 
-
 }
