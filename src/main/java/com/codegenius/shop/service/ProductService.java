@@ -11,4 +11,6 @@ public interface ProductService {
 
     ResponseEntity<List<ProductWrapper>> getAllProduct();
 
+    ResponseEntity<String> delete(Integer id);
+
 }

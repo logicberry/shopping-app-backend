@@ -45,4 +45,15 @@ public class ProductRestImpl implements ProductRest {
         }
         return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @Override
+    public ResponseEntity<String> delete(Integer id) {
+        try {
+            return productService.delete(id);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return ShopUtils.getResponseEntity(ShopConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+
+    }
 }

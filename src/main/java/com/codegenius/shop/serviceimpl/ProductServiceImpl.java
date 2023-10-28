@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -80,5 +81,25 @@ public class ProductServiceImpl implements ProductService {
             ex.printStackTrace();
         }
         return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<String> delete(Integer id) {
+        try {
+            if (jwtFilter.isAdmin()) {
+                Optional optional = productDao.findById(id);
+                if (!optional.isEmpty()) {
+                    productDao.deleteById(id);
+                    return ShopUtils.getResponseEntity("Product is deleted successfully", HttpStatus.OK);
+                }
+                return ShopUtils.getResponseEntity("Product doesn't exist", HttpStatus.OK);
+            } else {
+                return ShopUtils.getResponseEntity(ShopConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return ShopUtils.getResponseEntity(ShopConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+
     }
 }
