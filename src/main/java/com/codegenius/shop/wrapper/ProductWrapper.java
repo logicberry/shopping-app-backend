@@ -10,14 +10,17 @@ public class ProductWrapper {
     String name;
     String description;
     Integer price;
+    String company;
     Integer categoryId;
     String categoryName;
 
-    public ProductWrapper(Integer id, String name, String description, Integer price, Integer categoryId, String categoryName) {
+
+    public ProductWrapper(Integer id, String name, String description, Integer price,String company, Integer categoryId, String categoryName) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
+        this.company = company;
         this.categoryId = categoryId;
         this.categoryName = categoryName;
     }

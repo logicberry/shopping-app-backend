@@ -67,6 +67,7 @@ public class AuthServiceImpl implements AuthService {
         User user = new User();
         user.setName(requestMap.get("name"));
         user.setEmail(requestMap.get("email"));
+        user.setPhone(requestMap.get("phone"));
         String hashedPassword = PasswordUtils.hashPassword(requestMap.get("password"));
         user.setPassword(hashedPassword);
         if (requestMap.containsKey("role")) {

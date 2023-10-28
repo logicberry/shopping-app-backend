@@ -12,10 +12,16 @@ public class UserWrapper {
 
     private String email;
 
+    private String phone;
 
-    public UserWrapper(Integer id, String name, String email) {
+    private String country;
+
+
+    public UserWrapper(Integer id, String name, String email, String phone, String country) {
         this.id = id;
         this.name = name;
         this.email = email;
+        this.phone = phone;
+        this.country = country;
     }
 }

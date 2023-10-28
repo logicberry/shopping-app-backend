@@ -50,7 +50,9 @@ public class UserServiceImpl implements UserService {
            User user = userDao.findByEmailId(jwtfilter.getCurrentUser());
            if (!user.equals(null)) {
                user.setName(requestMap.get("name"));
+               user.setPhone(requestMap.get("phone"));
                user.setAddress(requestMap.get("address"));
+               user.setCountry(requestMap.get("country"));
                userDao.save(user);
                return ShopUtils.getResponseEntity("User Data Successfully updated", HttpStatus.OK);
            }

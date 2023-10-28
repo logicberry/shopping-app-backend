@@ -12,7 +12,7 @@ import java.io.Serializable;
 
 @NamedQuery(name = "User.findByEmailId", query = "select u from User u where u.email=:email")
 
-@NamedQuery(name = "User.getAllUser" ,query = "select new com.codegenius.shop.wrapper.UserWrapper(u.id,u.name,u.email) from User u where u.role='user'")
+@NamedQuery(name = "User.getAllUser" ,query = "select new com.codegenius.shop.wrapper.UserWrapper(u.id,u.name,u.email,u.phone,u.country) from User u where u.role='user'")
 
 @Data
 @Entity
@@ -34,8 +34,14 @@ public class User implements Serializable {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "phone")
+    private String phone;
+
     @Column(name = "password")
     private String password;
+
+    @Column(name = "country")
+    private String country;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
