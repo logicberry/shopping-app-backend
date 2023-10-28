@@ -1,6 +1,4 @@
 package com.codegenius.shop.serviceimpl;
-
-import com.codegenius.shop.JWT.CustomerUserDetailsService;
 import com.codegenius.shop.JWT.JwtFilter;
 import com.codegenius.shop.POJO.Category;
 import com.codegenius.shop.POJO.Product;
@@ -28,6 +26,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     JwtFilter jwtFilter;
+
     @Override
     public ResponseEntity<String> addNewProduct(Map<String, String> requestMap) {
 
@@ -46,7 +45,6 @@ public class ProductServiceImpl implements ProductService {
         return ShopUtils.getResponseEntity(ShopConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
-
 
 
     private boolean validateProductMap(Map<String, String> requestMap, boolean validateId) {
@@ -101,5 +99,37 @@ public class ProductServiceImpl implements ProductService {
         }
         return ShopUtils.getResponseEntity(ShopConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
 
+    }
+
+    @Override
+    public ResponseEntity<List<ProductWrapper>> getByCategory(Integer id) {
+        try {
+            List<ProductWrapper> products = productDao.getByCategory(id);
+
+            if (products.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else {
+                return new ResponseEntity<>(products, HttpStatus.OK);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<ProductWrapper> getProductById(Integer id) {
+        try {
+            ProductWrapper product = productDao.getProductById(id);
+
+            if (product != null) {
+                return new ResponseEntity<>(product, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return new ResponseEntity<>(new ProductWrapper(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

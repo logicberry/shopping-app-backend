@@ -77,7 +77,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ResponseEntity<String> login(Map<String, String> requestMap) {
-        log.info("Inside login {}", requestMap);
+
         try {
             Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(requestMap.get("email"), requestMap.get("password")));
             if (auth.isAuthenticated()) {

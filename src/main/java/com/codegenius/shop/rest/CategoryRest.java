@@ -1,6 +1,7 @@
 package com.codegenius.shop.rest;
 
 import com.codegenius.shop.POJO.Category;
+import com.codegenius.shop.wrapper.ProductWrapper;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,5 +17,7 @@ public interface CategoryRest {
 
     @GetMapping(path = "/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Category>> getAllCategory(@RequestParam(required = false) String filterValue);
+
+
 
 }

@@ -4,9 +4,9 @@ import com.codegenius.shop.POJO.User;
 import com.codegenius.shop.constants.ShopConstants;
 import com.codegenius.shop.dao.UserDao;
 import com.codegenius.shop.service.UserService;
+import com.codegenius.shop.utils.PasswordUtils;
 import com.codegenius.shop.utils.ShopUtils;
 import com.codegenius.shop.wrapper.UserWrapper;
-import com.google.common.base.Strings;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -65,14 +64,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<String> changePassword(Map<String, String> requestMap) {
         try {
-            User user = userDao.findByEmailId(jwtfilter.getCurrentUser());
-            if (!user.equals(null)) {
-                if(user.getPassword().equals(requestMap.get("oldPassword"))) {
-                    user.setPassword(requestMap.get("newPassword"));
+            String currentUserEmail = jwtfilter.getCurrentUser();
+            User user = userDao.findByEmailId(currentUserEmail);
+
+            if (user != null) {
+
+                if (PasswordUtils.verifyPassword(requestMap.get("oldPassword"), user.getPassword())) {
+                    String newPassword = PasswordUtils.hashPassword(requestMap.get("newPassword"));
+                    user.setPassword(newPassword);
                     userDao.save(user);
                     return ShopUtils.getResponseEntity("Password Updated successfully", HttpStatus.OK);
+                } else {
+                    return ShopUtils.getResponseEntity("Incorrect Old password", HttpStatus.BAD_REQUEST);
                 }
-                return ShopUtils.getResponseEntity("Incorrect password", HttpStatus.BAD_REQUEST);
             }
             return ShopUtils.getResponseEntity(ShopConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception ex) {
@@ -80,6 +84,4 @@ public class UserServiceImpl implements UserService {
         }
         return ShopUtils.getResponseEntity(ShopConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
-
 }

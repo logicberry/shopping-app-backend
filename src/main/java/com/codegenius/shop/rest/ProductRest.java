@@ -18,4 +18,11 @@ public interface ProductRest {
 
     @PostMapping(path = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> delete(@PathVariable Integer id);
+
+    @GetMapping(path = "/getProductById/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ProductWrapper> getProductById(@PathVariable Integer id);
+
+    @GetMapping(path = "/getByCategory/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<ProductWrapper>> getByCategory(@PathVariable Integer id);
+
 }

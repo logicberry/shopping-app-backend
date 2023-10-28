@@ -13,4 +13,9 @@ public interface ProductService {
 
     ResponseEntity<String> delete(Integer id);
 
+    ResponseEntity<List<ProductWrapper>> getByCategory(Integer id);
+
+    ResponseEntity<ProductWrapper> getProductById(Integer id);
+
+
 }
