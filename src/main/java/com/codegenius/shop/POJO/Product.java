@@ -46,6 +46,12 @@ public class Product implements Serializable {
     @Column(name = "company")
     private String company;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
+    @Column(name = "image_public_id")
+    private String imagePublicId;
+
 
 
 

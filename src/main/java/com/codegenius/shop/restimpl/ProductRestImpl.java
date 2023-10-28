@@ -9,7 +9,9 @@ import com.codegenius.shop.wrapper.ProductWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +27,9 @@ public class ProductRestImpl implements ProductRest {
     ProductDao productDao;
 
     @Override
-    public ResponseEntity<String> addNewProduct(Map<String, String> requestMap) {
+    public ResponseEntity<String> addNewProduct(@RequestParam("imageFile")MultipartFile imageFile,@RequestParam Map<String, String> requestMap) {
         try {
-            return productService.addNewProduct(requestMap);
+            return productService.addNewProduct(requestMap, imageFile);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

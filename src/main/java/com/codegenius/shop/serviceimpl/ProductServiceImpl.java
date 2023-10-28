@@ -1,4 +1,7 @@
 package com.codegenius.shop.serviceimpl;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.Singleton;
+import com.cloudinary.utils.ObjectUtils;
 import com.codegenius.shop.JWT.JwtFilter;
 import com.codegenius.shop.POJO.Category;
 import com.codegenius.shop.POJO.Product;
@@ -12,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,15 +31,35 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     JwtFilter jwtFilter;
 
+    @Autowired
+    Cloudinary cloudinary;
+
+
     @Override
-    public ResponseEntity<String> addNewProduct(Map<String, String> requestMap) {
+    public ResponseEntity<String> addNewProduct(Map<String, String> requestMap, MultipartFile imageFile) {
 
         try {
             if (jwtFilter.isAdmin()) {
-                if (validateProductMap(requestMap, false)) {
-                    productDao.save(getProductFromMap(requestMap));
-                    return ShopUtils.getResponseEntity("Product Added Successfully", HttpStatus.OK);
+                Product product = getProductFromMap(requestMap);
+                if (imageFile != null && !imageFile.isEmpty()) {
+                    String folder = "products"; // Change this to your desired folder name
+
+                    // Configure Cloudinary upload options
+                    Map<String, Object> uploadOptions = ObjectUtils.asMap(
+                            "use_filename", true,
+                            "folder", folder
+                    );
+                    // Validate and upload the image to Cloudinary
+                    Map<?, ?> uploadResult = cloudinary.uploader().upload(imageFile.getBytes(), uploadOptions);
+
+                    // Set the image URL and public ID in the product
+                    product.setImageUrl((String) uploadResult.get("url"));
+                    product.setImagePublicId((String) uploadResult.get("public_id"));
                 }
+
+                productDao.save(product);
+                return ShopUtils.getResponseEntity("Product Added Successfully", HttpStatus.OK);
+
             } else {
                 return ShopUtils.getResponseEntity(ShopConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED);
             }

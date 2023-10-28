@@ -4,6 +4,7 @@ import com.codegenius.shop.wrapper.ProductWrapper;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -11,7 +12,7 @@ import java.util.Map;
 public interface ProductRest {
 
     @PostMapping(path = "/add", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<String> addNewProduct(@RequestBody Map<String, String> requestMap);
+    ResponseEntity<String> addNewProduct(@RequestParam("imageFile") MultipartFile imageFile, @RequestBody Map<String, String> requestMap);
 
     @GetMapping(path = "/get")
     ResponseEntity<List<ProductWrapper>> getAllProduct();
