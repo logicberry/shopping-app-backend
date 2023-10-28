@@ -42,17 +42,13 @@ public class ProductServiceImpl implements ProductService {
             if (jwtFilter.isAdmin()) {
                 Product product = getProductFromMap(requestMap);
                 if (imageFile != null && !imageFile.isEmpty()) {
-                    String folder = "products"; // Change this to your desired folder name
-
-                    // Configure Cloudinary upload options
+                    String folder = "products";
                     Map<String, Object> uploadOptions = ObjectUtils.asMap(
                             "use_filename", true,
                             "folder", folder
                     );
-                    // Validate and upload the image to Cloudinary
                     Map<?, ?> uploadResult = cloudinary.uploader().upload(imageFile.getBytes(), uploadOptions);
 
-                    // Set the image URL and public ID in the product
                     product.setImageUrl((String) uploadResult.get("url"));
                     product.setImagePublicId((String) uploadResult.get("public_id"));
                 }

@@ -10,10 +10,10 @@ import java.io.Serial;
 import java.io.Serializable;
 
 
-@NamedQuery(name = "Product.getAllProduct", query = "select new com.codegenius.shop.wrapper.ProductWrapper(p.id,p.name,p.description,p.price,p.company,p.category.id,p.category.name) from Product p")
-@NamedQuery(name = "Product.getProductById", query = "select new com.codegenius.shop.wrapper.ProductWrapper(p.id,p.name,p.description,p.price,p.company,p.category.id,p.category.name) from Product p where p.id=:id")
+@NamedQuery(name = "Product.getAllProduct", query = "select new com.codegenius.shop.wrapper.ProductWrapper(p.id,p.name,p.description,p.price,p.company,p.imageUrl,p.category.id,p.category.name) from Product p")
+@NamedQuery(name = "Product.getProductById", query = "select new com.codegenius.shop.wrapper.ProductWrapper(p.id,p.name,p.description,p.price,p.company,p.imageUrl,p.category.id,p.category.name) from Product p where p.id=:id")
 
-@NamedQuery(name = "Product.getByCategory", query = "select new com.codegenius.shop.wrapper.ProductWrapper(p.id,p.name,p.description,p.price,p.company,p.category.id,p.category.name) from Product p where p.category.id=:id")
+@NamedQuery(name = "Product.getByCategory", query = "select new com.codegenius.shop.wrapper.ProductWrapper(p.id,p.name,p.description,p.price,p.company,p.imageUrl,p.category.id,p.category.name) from Product p where p.category.id=:id")
 
 
 @Data
