@@ -3,6 +3,6 @@ COPY . .
 RUN mvn clean package -DskipTests
 
 FROM openjdk:17.0.1-jdk-slim
-COPY --from=build /target/shopapp-0.0.1-SNAPSHOT.jar shopapp.jar
+COPY --from=build /target/shop-0.0.1-SNAPSHOT.jar shop.jar
 EXPOSE 8000
-ENTRYPOINT ["java", "-jar", "shopapp.jar"]
+ENTRYPOINT ["java", "-jar", "shop.jar"]
