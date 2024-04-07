@@ -1,6 +1,5 @@
 package com.codegenius.shop.serviceimpl;
 import com.cloudinary.Cloudinary;
-import com.cloudinary.Singleton;
 import com.cloudinary.utils.ObjectUtils;
 import com.codegenius.shop.JWT.JwtFilter;
 import com.codegenius.shop.POJO.Category;
@@ -87,8 +86,8 @@ public class ProductServiceImpl implements ProductService {
         product.setName(requestMap.get("name"));
         product.setDescription(requestMap.get("description"));
         product.setCompany(requestMap.get("company"));
-        product.setPrice(Integer.parseInt(requestMap.get("price")));
-
+        product.setPrice(Double.parseDouble(requestMap.get("price")));
+        product.setInitialPrice(Double.parseDouble(requestMap.get("initialPrice")));
         return product;
     }
 

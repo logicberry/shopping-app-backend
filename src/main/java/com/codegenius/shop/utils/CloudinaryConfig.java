@@ -3,18 +3,22 @@ package com.codegenius.shop.utils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import com.cloudinary.Cloudinary;
-import org.springframework.beans.factory.annotation.Value;
-
+//import org.springframework.beans.factory.annotation.Value;
+import io.github.cdimascio.dotenv.Dotenv;
 @Configuration
 public class CloudinaryConfig {
 
-    @Value("${CLOUDINARY_URL}")
-    private String cloudinaryUrl;
 
     @Bean
     public Cloudinary cloudinary() {
-        // Create and configure a Cloudinary instance
-        return new Cloudinary(cloudinaryUrl);
-    }
+        // Load Cloudinary credentials from environment variables
+        Dotenv dotenv = Dotenv.load();
+        String cloudinaryUrl = dotenv.get("CLOUDINARY_URL");
 
+        // Create and configure a Cloudinary instance
+        Cloudinary cloudinary = new Cloudinary(cloudinaryUrl);
+
+        return cloudinary;
+
+}
 }

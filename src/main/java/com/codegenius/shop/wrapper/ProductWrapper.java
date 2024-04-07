@@ -1,6 +1,6 @@
 package com.codegenius.shop.wrapper;
 
-import jakarta.persistence.Column;
+import com.codegenius.shop.POJO.Category;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,10 +10,10 @@ public class ProductWrapper {
     Integer id;
     String name;
     String description;
-    Integer price;
+    Double price;
+    Double initialPrice;
     String company;
-    Integer categoryId;
-    String categoryName;
+    Category category;
     String imageUrl;
 
 
@@ -21,18 +21,20 @@ public class ProductWrapper {
 
 
 
-    public ProductWrapper(Integer id, String name, String description, Integer price,String company,String imageUrl, Integer categoryId, String categoryName) {
+    public ProductWrapper(Integer id, String name, String description, Double price, Double initialPrice, String company,String imageUrl, Category category) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
+        this.initialPrice = initialPrice;
         this.company = company;
         this.imageUrl = imageUrl;
-        this.categoryId = categoryId;
-        this.categoryName = categoryName;
+        this.category = category;
     }
 
 
 
 
 }
+
+

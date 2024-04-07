@@ -33,7 +33,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<UserWrapper> viewProfile() {
         try {
-                return new ResponseEntity<>(userDao.viewProfile(), HttpStatus.OK);
+            String currentUserEmail = jwtfilter.getCurrentUser();
+            UserWrapper userWrapper = userDao.viewProfile(currentUserEmail);
+                return new ResponseEntity<>(userWrapper, HttpStatus.OK);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

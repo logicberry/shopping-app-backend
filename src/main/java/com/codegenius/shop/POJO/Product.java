@@ -10,10 +10,10 @@ import java.io.Serial;
 import java.io.Serializable;
 
 
-@NamedQuery(name = "Product.getAllProduct", query = "select new com.codegenius.shop.wrapper.ProductWrapper(p.id,p.name,p.description,p.price,p.company,p.imageUrl,p.category.id,p.category.name) from Product p")
-@NamedQuery(name = "Product.getProductById", query = "select new com.codegenius.shop.wrapper.ProductWrapper(p.id,p.name,p.description,p.price,p.company,p.imageUrl,p.category.id,p.category.name) from Product p where p.id=:id")
+@NamedQuery(name = "Product.getAllProduct", query = "select new com.codegenius.shop.wrapper.ProductWrapper(p.id,p.name,p.description,p.price,p.initialPrice,p.company,p.imageUrl,p.category) from Product p")
+@NamedQuery(name = "Product.getProductById", query = "select new com.codegenius.shop.wrapper.ProductWrapper(p.id,p.name,p.description,p.price,p.initialPrice,p.company,p.imageUrl,p.category) from Product p where p.id=:id")
 
-@NamedQuery(name = "Product.getByCategory", query = "select new com.codegenius.shop.wrapper.ProductWrapper(p.id,p.name,p.description,p.price,p.company,p.imageUrl,p.category.id,p.category.name) from Product p where p.category.id=:id")
+@NamedQuery(name = "Product.getByCategory", query = "select new com.codegenius.shop.wrapper.ProductWrapper(p.id,p.name,p.description,p.price,p.initialPrice,p.company,p.imageUrl,p.category) from Product p where p.category.id=:id")
 
 
 @Data
@@ -41,7 +41,10 @@ public class Product implements Serializable {
     private String description;
 
     @Column(name = "price")
-    private Integer price;
+    private Double price;
+
+    @Column(name = "initialPrice")
+    private Double initialPrice;
 
     @Column(name = "company")
     private String company;
@@ -51,7 +54,6 @@ public class Product implements Serializable {
 
     @Column(name = "image_public_id")
     private String imagePublicId;
-
 
 
 

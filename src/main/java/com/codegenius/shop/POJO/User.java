@@ -14,8 +14,9 @@ import java.io.Serializable;
 
 @NamedQuery(name = "User.getAllUser" ,query = "select new com.codegenius.shop.wrapper.UserWrapper(u.id,u.name,u.email,u.phone,u.address,u.country,u.role) from User u where u.role='user'")
 
-@NamedQuery(name = "User.viewProfile" ,query = "select new com.codegenius.shop.wrapper.UserWrapper(u.id,u.name,u.email,u.phone,u.address,u.country,u.role) from User u")
-
+@NamedQuery(name = "User.viewProfile" ,query = "select new com.codegenius.shop.wrapper.UserWrapper(u.id, u.name, u.email, u.phone, u.address, u.country, u.role) " +
+        "from User u " +
+        "where u.email = :email")
 @Data
 @Entity
 @DynamicInsert

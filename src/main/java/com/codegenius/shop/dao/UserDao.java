@@ -10,7 +10,7 @@ import java.util.List;
 public interface UserDao extends JpaRepository<User, Integer> {
    User findByEmailId(@Param("email") String email);
 
-   UserWrapper viewProfile();
+   UserWrapper viewProfile(String email);
 
    List<UserWrapper> getAllUser();
 
